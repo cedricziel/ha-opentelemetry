@@ -13,6 +13,19 @@
           "dataset_id": "Dataset ID (optional, sent as x-dataset-id)",
           "service_name": "Service name reported in telemetry"
         }
+      },
+      "reconfigure": {
+        "title": "Edit the OpenTelemetry collector connection",
+        "description": "Update where Home Assistant sends telemetry. Existing exporters reload with the new settings.",
+        "data": {
+          "endpoint": "OTLP endpoint (host:port for gRPC, or a base URL for HTTP)",
+          "protocol": "Protocol",
+          "insecure": "Connection is plaintext (no TLS)",
+          "auth_header": "Authorization header value (e.g. \"Bearer sk-...\")",
+          "tenant_id": "Tenant ID (sent as x-tenant-id)",
+          "dataset_id": "Dataset ID (optional, sent as x-dataset-id)",
+          "service_name": "Service name reported in telemetry"
+        }
       }
     },
     "error": {
@@ -20,7 +33,8 @@
       "tenant_required": "Enter a tenant ID"
     },
     "abort": {
-      "already_configured": "This endpoint and tenant are already configured"
+      "already_configured": "This endpoint and tenant are already configured",
+      "reconfigure_successful": "Connection settings updated"
     }
   },
   "options": {

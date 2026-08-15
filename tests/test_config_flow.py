@@ -5,6 +5,7 @@ from unittest.mock import patch
 
 from homeassistant import config_entries
 from homeassistant.core import HomeAssistant
+from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.opentelemetry.const import (
     CONF_ENDPOINT,
@@ -83,3 +84,29 @@ async def test_duplicate_entry_aborts(hass: HomeAssistant) -> None:
 
     assert result["type"] == "abort"
     assert result["reason"] == "already_configured"
+
+
+async def test_reconfigure_updates_connection(hass: HomeAssistant) -> None:
+    """Reconfiguring an existing entry updates its data and reloads it."""
+    entry = MockConfigEntry(domain=DOMAIN, data=USER_INPUT, options={})
+    entry.add_to_hass(hass)
+
+    with patch(
+        "custom_components.opentelemetry.async_setup_entry", return_value=True
+    ):
+        assert await hass.config_entries.async_setup(entry.entry_id)
+        await hass.async_block_till_done()
+
+        result = await entry.start_reconfigure_flow(hass)
+        assert result["type"] == "form"
+        assert result["step_id"] == "reconfigure"
+
+        new_input = {**USER_INPUT, CONF_ENDPOINT: "192.168.178.6:4318"}
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"], new_input
+        )
+        await hass.async_block_till_done()
+
+    assert result["type"] == "abort"
+    assert result["reason"] == "reconfigure_successful"
+    assert entry.data[CONF_ENDPOINT] == "192.168.178.6:4318"

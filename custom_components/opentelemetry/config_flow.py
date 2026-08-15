@@ -122,6 +122,27 @@ class OpenTelemetryConfigFlow(ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
+    async def async_step_reconfigure(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Edit the OTLP connection details of an existing entry."""
+        errors: dict[str, str] = {}
+        reconfigure_entry = self._get_reconfigure_entry()
+        if user_input is not None:
+            errors = _validate_connection(user_input)
+            if not errors:
+                return self.async_update_reload_and_abort(
+                    reconfigure_entry,
+                    title=f"OpenTelemetry ({user_input[CONF_TENANT_ID]})",
+                    data=user_input,
+                )
+
+        return self.async_show_form(
+            step_id="reconfigure",
+            data_schema=_connection_schema(user_input or reconfigure_entry.data),
+            errors=errors,
+        )
+
     @staticmethod
     @callback
     def async_get_options_flow(
