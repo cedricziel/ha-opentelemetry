@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/cedricziel/ha-opentelemetry/compare/v0.2.0...v0.3.0) (2026-08-15)
+
+
+### Features
+
+* **opentelemetry:** collect process and host resource metrics ([480b145](https://github.com/cedricziel/ha-opentelemetry/commit/480b145798f34ffb893d2265dcbe5deba347b25d))
+
 ## [0.2.0](https://github.com/cedricziel/ha-opentelemetry/compare/v0.1.0...v0.2.0) (2026-08-15)
 
 

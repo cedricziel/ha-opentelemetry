@@ -17,5 +17,5 @@
     "opentelemetry-instrumentation-logging>=0.48b0",
     "opentelemetry-instrumentation-system-metrics>=0.48b0"
   ],
-  "version": "0.2.0"
+  "version": "0.3.0"
 }
