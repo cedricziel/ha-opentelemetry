@@ -56,17 +56,6 @@ CI runs this on every change to `weaver/`.
 
 Enable/disable traces, metrics, logs; include system-level and/or per-entity telemetry; set the metric export interval; and optionally restrict per-entity telemetry to specific domains or exclude specific entities.
 
-## Using it with SignalDB
-
-[SignalDB](https://github.com/cedricziel/signaldb) speaks OTLP natively and authenticates ingest with two headers. Configure this integration with:
-
-- Endpoint: `<signaldb-host>:4317` (gRPC ingest port)
-- Protocol: `grpc`, Insecure: on (unless SignalDB is behind TLS)
-- Authorization header: `Bearer <ingest api key>`
-- Tenant ID: your SignalDB tenant
-
-> SignalDB's HTTP trace ingest is currently a stub — use the gRPC protocol for traces.
-
 ## Development
 
 ```console
