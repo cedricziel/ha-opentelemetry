@@ -1,0 +1,44 @@
+groups:
+  - id: registry.homeassistant
+    type: attribute_group
+    brief: >
+      Attributes describing Home Assistant entities, domains, and service
+      calls, shared across the metrics, logs, and traces emitted by the
+      ha-opentelemetry integration.
+    stability: development
+    attributes:
+      - id: homeassistant.entity_id
+        type: string
+        stability: development
+        brief: The Home Assistant entity ID this telemetry is about.
+        examples: ["light.kitchen", "sensor.living_room_temperature"]
+      - id: homeassistant.domain
+        type: string
+        stability: development
+        brief: The Home Assistant integration domain an entity belongs to.
+        examples: ["light", "sensor", "climate"]
+      - id: homeassistant.unit
+        type: string
+        stability: development
+        brief: The unit of measurement reported by an entity's state, if any.
+        examples: ["°C", "W", "%"]
+      - id: homeassistant.service.domain
+        type: string
+        stability: development
+        brief: The domain a called service belongs to.
+        examples: ["light", "climate", "automation"]
+      - id: homeassistant.service.name
+        type: string
+        stability: development
+        brief: The name of a called service.
+        examples: ["turn_on", "turn_off", "set_temperature"]
+      - id: homeassistant.new_state
+        type: string
+        stability: development
+        brief: An entity's state after a state change.
+        examples: ["on", "off", "21.5"]
+      - id: homeassistant.old_state
+        type: string
+        stability: development
+        brief: An entity's state before a state change.
+        examples: ["on", "off", "20.9"]

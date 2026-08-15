@@ -1,0 +1,53 @@
+groups:
+  - id: metric.homeassistant.entities.count
+    type: metric
+    metric_name: homeassistant.entities.count
+    stability: development
+    brief: >
+      Entities known to Home Assistant, grouped by domain. Emitted when
+      system-scoped metrics are enabled.
+    instrument: gauge
+    unit: "1"
+    attributes:
+      - ref: homeassistant.domain
+        requirement_level: required
+
+  - id: metric.homeassistant.state_changed.count
+    type: metric
+    metric_name: homeassistant.state_changed.count
+    stability: development
+    brief: >
+      State changes observed on the Home Assistant event bus since this
+      integration was set up. Emitted when system-scoped metrics are
+      enabled.
+    instrument: gauge
+    unit: "1"
+
+  - id: metric.homeassistant.service_calls.count
+    type: metric
+    metric_name: homeassistant.service_calls.count
+    stability: development
+    brief: >
+      Service calls observed on the Home Assistant event bus since this
+      integration was set up. Emitted when system-scoped metrics are
+      enabled.
+    instrument: gauge
+    unit: "1"
+
+  - id: metric.homeassistant.entity.state
+    type: metric
+    metric_name: homeassistant.entity.state
+    stability: development
+    brief: >
+      The current numeric state value of a Home Assistant entity, sampled
+      at the configured export interval. Non-numeric entity states are not
+      reported. Emitted when entity-scoped metrics are enabled.
+    instrument: gauge
+    unit: "1"
+    attributes:
+      - ref: homeassistant.entity_id
+        requirement_level: required
+      - ref: homeassistant.domain
+        requirement_level: required
+      - ref: homeassistant.unit
+        requirement_level: recommended

@@ -1,0 +1,38 @@
+groups:
+  - id: span.homeassistant.service_call
+    type: span
+    span_kind: internal
+    stability: development
+    brief: >
+      A point-in-time span marking that a Home Assistant service was
+      called (span name: "service_call {domain}.{service}"). Home
+      Assistant exposes no public hook around service-call completion,
+      so start_time equals end_time — this does not represent the
+      duration of executing the service. Emitted when system-scoped
+      traces are enabled.
+    note: >
+      When entity-scoped traces are also enabled and the service call
+      targets one or more entities, homeassistant.entity_id is attached.
+    attributes:
+      - ref: homeassistant.service.domain
+        requirement_level: required
+      - ref: homeassistant.service.name
+        requirement_level: required
+      - ref: homeassistant.entity_id
+        requirement_level: recommended
+
+  - id: span.homeassistant.state_changed
+    type: span
+    span_kind: internal
+    stability: development
+    brief: >
+      A point-in-time span marking that a Home Assistant entity's state
+      changed (span name: "state_changed {entity_id}"). start_time equals
+      end_time. Emitted when entity-scoped traces are enabled.
+    attributes:
+      - ref: homeassistant.entity_id
+        requirement_level: required
+      - ref: homeassistant.new_state
+        requirement_level: required
+      - ref: homeassistant.old_state
+        requirement_level: recommended
