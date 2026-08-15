@@ -10,7 +10,10 @@ integration-specific names.
 """
 from __future__ import annotations
 
-from opentelemetry.instrumentation.system_metrics import SystemMetricsInstrumentor
+from opentelemetry.instrumentation.system_metrics import (
+    SystemMetricsInstrumentor,
+    _build_default_config,
+)
 from opentelemetry.sdk.metrics import MeterProvider
 
 PROCESS_METRICS = [
@@ -63,7 +66,9 @@ def start_system_metrics(
     if not names:
         return None
 
-    instrumentor = SystemMetricsInstrumentor(config=dict.fromkeys(names))
+    defaults = _build_default_config()
+    config = {name: defaults[name] for name in names}
+    instrumentor = SystemMetricsInstrumentor(config=config)
     instrumentor.instrument(meter_provider=meter_provider)
     return instrumentor
 

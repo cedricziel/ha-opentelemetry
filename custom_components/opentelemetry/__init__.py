@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import logging
+from functools import partial
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -166,10 +167,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             include_domains=include_domains,
             exclude_entities=exclude_entities,
         )
-        runtime["system_metrics"] = start_system_metrics(
-            meter_provider,
-            process_metrics=enable_process_metrics,
-            host_metrics=enable_host_metrics,
+        runtime["system_metrics"] = await hass.async_add_executor_job(
+            partial(
+                start_system_metrics,
+                meter_provider,
+                process_metrics=enable_process_metrics,
+                host_metrics=enable_host_metrics,
+            )
         )
 
     if enable_logs:
