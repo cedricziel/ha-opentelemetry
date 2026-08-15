@@ -1,0 +1,43 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to an OpenTelemetry collector",
+        "description": "Point Home Assistant at an OTLP endpoint (such as SignalDB, an OpenTelemetry Collector, Grafana Tempo/Loki/Mimir, or any OTLP-compatible backend).",
+        "data": {
+          "endpoint": "OTLP endpoint (host:port for gRPC, or a base URL for HTTP)",
+          "protocol": "Protocol",
+          "insecure": "Connection is plaintext (no TLS)",
+          "auth_header": "Authorization header value (e.g. \"Bearer sk-...\")",
+          "tenant_id": "Tenant ID (sent as x-tenant-id)",
+          "dataset_id": "Dataset ID (optional, sent as x-dataset-id)",
+          "service_name": "Service name reported in telemetry"
+        }
+      }
+    },
+    "error": {
+      "endpoint_required": "Enter an OTLP endpoint",
+      "tenant_required": "Enter a tenant ID"
+    },
+    "abort": {
+      "already_configured": "This endpoint and tenant are already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "What to export",
+        "data": {
+          "enable_traces": "Export traces",
+          "enable_metrics": "Export metrics",
+          "enable_logs": "Export logs",
+          "scope_system": "Include system-level telemetry (service calls, entity counts, event throughput)",
+          "scope_entities": "Include per-entity telemetry (entity state as metrics/spans)",
+          "scan_interval": "Metric export interval (seconds)",
+          "include_domains": "Only include these entity domains for per-entity telemetry (comma-separated, empty = all)",
+          "exclude_entities": "Always exclude these entity IDs (comma-separated)"
+        }
+      }
+    }
+  }
+}
