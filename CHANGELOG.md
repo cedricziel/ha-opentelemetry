@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.4.0](https://github.com/cedricziel/ha-opentelemetry/compare/v0.3.1...v0.4.0) (2026-08-15)
+
+
+### Features
+
+* **opentelemetry:** add entity/device/area registry resolution helper ([9eaef11](https://github.com/cedricziel/ha-opentelemetry/commit/9eaef11b8e401537ed52f3c2ca69443ceabdb874))
+* **opentelemetry:** correlate spans via event context, add automation spans, gate state-changed spans ([ab33a7e](https://github.com/cedricziel/ha-opentelemetry/commit/ab33a7e238acf42bef4f909e6858f623bcf1f2db))
+* **opentelemetry:** enrich forwarded logs with domain, exclude OTel's own logs ([7ce0fdb](https://github.com/cedricziel/ha-opentelemetry/commit/7ce0fdb19f3c4737ee9802a51e57616367e8f1c0))
+* **opentelemetry:** redesign system metrics as event throughput, health, and setup timing ([b52de65](https://github.com/cedricziel/ha-opentelemetry/commit/b52de6510bfb4fe8bff786478bad3b0d2a0f59ca))
+
 ## [0.3.1](https://github.com/cedricziel/ha-opentelemetry/compare/v0.3.0...v0.3.1) (2026-08-15)
 
 
