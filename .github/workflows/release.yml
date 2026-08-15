@@ -1,0 +1,53 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and publish release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify manifest version matches tag
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          manifest_version=$(python3 -c "import json; print(json.load(open('custom_components/opentelemetry/manifest.json'))['version'])")
+          if [ "$tag" != "$manifest_version" ]; then
+            echo "Tag v$tag does not match manifest.json version $manifest_version"
+            exit 1
+          fi
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-test.txt
+          pip install \
+            "opentelemetry-api>=1.27.0,<2.0.0" \
+            "opentelemetry-sdk>=1.27.0,<2.0.0" \
+            "opentelemetry-exporter-otlp-proto-grpc>=1.27.0,<2.0.0" \
+            "opentelemetry-exporter-otlp-proto-http>=1.27.0,<2.0.0" \
+            "opentelemetry-instrumentation-logging>=0.48b0"
+
+      - name: Run tests
+        run: pytest tests/ -v
+
+      - name: Zip the integration
+        working-directory: custom_components/opentelemetry
+        run: zip -r opentelemetry.zip . -x "__pycache__/*"
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: custom_components/opentelemetry/opentelemetry.zip
+          generate_release_notes: true

@@ -1,0 +1,38 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  hassfest:
+    name: Hassfest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: home-assistant/actions/hassfest@master
+
+  hacs:
+    name: HACS
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hacs/action@main
+        with:
+          category: integration
+
+  weaver:
+    name: Weaver registry
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install weaver
+        run: |
+          curl -sL -o weaver.tar.xz \
+            https://github.com/open-telemetry/weaver/releases/download/v0.25.1/weaver-x86_64-unknown-linux-gnu.tar.xz
+          tar -xf weaver.tar.xz
+          echo "$PWD/weaver-x86_64-unknown-linux-gnu" >> "$GITHUB_PATH"
+      - name: Check registry
+        run: weaver registry check -r weaver
