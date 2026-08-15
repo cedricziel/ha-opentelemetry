@@ -47,8 +47,9 @@
           "enable_process_metrics": "Include process metrics (Home Assistant's own CPU, memory, threads, GC)",
           "enable_host_metrics": "Include host metrics (machine/container CPU, memory, swap, disk, network)",
           "enable_logs": "Export logs",
-          "scope_system": "Include system-level telemetry (service calls, entity counts, event throughput)",
-          "scope_entities": "Include per-entity telemetry (entity state as metrics/spans)",
+          "scope_system": "Include system-level telemetry (service calls, automations, entity/integration health, event throughput)",
+          "scope_entities": "Include per-entity telemetry (entity state as metrics)",
+          "enable_state_changed_traces": "Also emit a trace span per entity state change (high volume; off by default)",
           "scan_interval": "Metric export interval (seconds)",
           "include_domains": "Only include these entity domains for per-entity telemetry (comma-separated, empty = all)",
           "exclude_entities": "Always exclude these entity IDs (comma-separated)"

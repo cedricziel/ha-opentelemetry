@@ -23,6 +23,7 @@ from .const import (
     CONF_ENABLE_LOGS,
     CONF_ENABLE_METRICS,
     CONF_ENABLE_PROCESS_METRICS,
+    CONF_ENABLE_STATE_CHANGED_TRACES,
     CONF_ENABLE_TRACES,
     CONF_ENDPOINT,
     CONF_EXCLUDE_ENTITIES,
@@ -38,6 +39,7 @@ from .const import (
     DEFAULT_ENABLE_LOGS,
     DEFAULT_ENABLE_METRICS,
     DEFAULT_ENABLE_PROCESS_METRICS,
+    DEFAULT_ENABLE_STATE_CHANGED_TRACES,
     DEFAULT_ENABLE_TRACES,
     DEFAULT_SCAN_INTERVAL,
     DEFAULT_SCOPE_ENTITIES,
@@ -99,6 +101,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     enable_host_metrics = options.get(
         CONF_ENABLE_HOST_METRICS, DEFAULT_ENABLE_HOST_METRICS
     )
+    enable_state_changed_traces = options.get(
+        CONF_ENABLE_STATE_CHANGED_TRACES, DEFAULT_ENABLE_STATE_CHANGED_TRACES
+    )
 
     ha_uuid = await instance_id.async_get(hass)
     resource = Resource.create(
@@ -133,7 +138,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         tracer = tracer_provider.get_tracer(DOMAIN)
         runtime["tracer_provider"] = tracer_provider
         runtime["tracing"] = HomeAssistantTracing(
-            hass, tracer, scope_system=scope_system, scope_entities=scope_entities
+            hass,
+            tracer,
+            scope_system=scope_system,
+            scope_entities=scope_entities,
+            enable_state_changed_traces=enable_state_changed_traces,
+            include_domains=include_domains,
+            exclude_entities=exclude_entities,
         )
 
     if enable_metrics:

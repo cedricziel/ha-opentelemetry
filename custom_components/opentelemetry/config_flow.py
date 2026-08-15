@@ -29,6 +29,7 @@ from .const import (
     CONF_ENABLE_LOGS,
     CONF_ENABLE_METRICS,
     CONF_ENABLE_PROCESS_METRICS,
+    CONF_ENABLE_STATE_CHANGED_TRACES,
     CONF_ENABLE_TRACES,
     CONF_ENDPOINT,
     CONF_EXCLUDE_ENTITIES,
@@ -44,6 +45,7 @@ from .const import (
     DEFAULT_ENABLE_LOGS,
     DEFAULT_ENABLE_METRICS,
     DEFAULT_ENABLE_PROCESS_METRICS,
+    DEFAULT_ENABLE_STATE_CHANGED_TRACES,
     DEFAULT_ENABLE_TRACES,
     DEFAULT_INSECURE,
     DEFAULT_PROTOCOL,
@@ -216,6 +218,13 @@ class OpenTelemetryOptionsFlow(OptionsFlow):
                 vol.Required(
                     CONF_SCOPE_ENTITIES,
                     default=current.get(CONF_SCOPE_ENTITIES, DEFAULT_SCOPE_ENTITIES),
+                ): BooleanSelector(),
+                vol.Required(
+                    CONF_ENABLE_STATE_CHANGED_TRACES,
+                    default=current.get(
+                        CONF_ENABLE_STATE_CHANGED_TRACES,
+                        DEFAULT_ENABLE_STATE_CHANGED_TRACES,
+                    ),
                 ): BooleanSelector(),
                 vol.Required(
                     CONF_SCAN_INTERVAL,
