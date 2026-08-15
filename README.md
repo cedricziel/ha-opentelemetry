@@ -6,6 +6,8 @@
 
 A [HACS](https://hacs.xyz/) custom integration that exports Home Assistant telemetry — metrics, logs, and traces — to any [OpenTelemetry](https://opentelemetry.io/) (OTLP) backend: an OpenTelemetry Collector, Grafana Tempo/Loki/Mimir, or a database like [SignalDB](https://github.com/cedricziel/signaldb).
 
+Only the current Home Assistant release is supported — no back-compat testing against older cores. `hacs.json` pins the minimum HA version to the current release line, and CI always tests against the latest `pytest-homeassistant-custom-component`.
+
 ## What it exports
 
 Each signal can be turned on or off independently, and scoped to system-level telemetry, per-entity telemetry, or both:
