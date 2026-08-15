@@ -1,7 +1,9 @@
 {
   "domain": "opentelemetry",
   "name": "OpenTelemetry",
-  "codeowners": ["@cedricziel"],
+  "codeowners": [
+    "@cedricziel"
+  ],
   "config_flow": true,
   "documentation": "https://github.com/cedricziel/ha-opentelemetry",
   "integration_type": "service",
@@ -14,5 +16,5 @@
     "opentelemetry-exporter-otlp-proto-http>=1.27.0,<2.0.0",
     "opentelemetry-instrumentation-logging>=0.48b0"
   ],
-  "version": "0.1.0"
+  "version": "0.2.0"
 }
