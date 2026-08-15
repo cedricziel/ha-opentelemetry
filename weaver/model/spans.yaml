@@ -12,13 +12,54 @@ groups:
       traces are enabled.
     note: >
       When entity-scoped traces are also enabled and the service call
-      targets one or more entities, homeassistant.entity_id is attached.
+      targets exactly one entity, homeassistant.entity_id (and, if
+      resolvable, homeassistant.area) is attached; when it targets more
+      than one, homeassistant.target.entity_ids is attached instead.
+      Entities excluded via the integration's entity filters are omitted
+      from both.
     attributes:
       - ref: homeassistant.service.domain
         requirement_level: required
       - ref: homeassistant.service.name
         requirement_level: required
       - ref: homeassistant.entity_id
+        requirement_level: recommended
+      - ref: homeassistant.target.entity_ids
+        requirement_level: recommended
+      - ref: homeassistant.area
+        requirement_level: recommended
+      - ref: homeassistant.context.id
+        requirement_level: recommended
+      - ref: homeassistant.context.parent_id
+        requirement_level: recommended
+      - ref: homeassistant.context.user_id
+        requirement_level: recommended
+
+  - id: span.homeassistant.automation_triggered
+    type: span
+    span_kind: internal
+    stability: development
+    brief: >
+      A point-in-time span marking that a Home Assistant automation was
+      triggered (span name: "automation_triggered {entity_id}"). start_time
+      equals end_time — automations expose no public hook for run
+      completion, only for the trigger firing. Emitted when system-scoped
+      traces are enabled.
+    note: >
+      A triggered automation's subsequent service_call spans share its
+      event context, joinable via the homeassistant.context.* attributes.
+    attributes:
+      - ref: homeassistant.entity_id
+        requirement_level: required
+      - ref: homeassistant.automation.name
+        requirement_level: recommended
+      - ref: homeassistant.automation.source
+        requirement_level: recommended
+      - ref: homeassistant.context.id
+        requirement_level: recommended
+      - ref: homeassistant.context.parent_id
+        requirement_level: recommended
+      - ref: homeassistant.context.user_id
         requirement_level: recommended
 
   - id: span.homeassistant.state_changed
@@ -28,11 +69,21 @@ groups:
     brief: >
       A point-in-time span marking that a Home Assistant entity's state
       changed (span name: "state_changed {entity_id}"). start_time equals
-      end_time. Emitted when entity-scoped traces are enabled.
+      end_time. Off by default (high volume); enabled via a dedicated
+      option independent of entity-scoped metrics. Respects the
+      integration's entity include/exclude filters.
     attributes:
       - ref: homeassistant.entity_id
         requirement_level: required
       - ref: homeassistant.new_state
         requirement_level: required
       - ref: homeassistant.old_state
+        requirement_level: recommended
+      - ref: homeassistant.area
+        requirement_level: recommended
+      - ref: homeassistant.context.id
+        requirement_level: recommended
+      - ref: homeassistant.context.parent_id
+        requirement_level: recommended
+      - ref: homeassistant.context.user_id
         requirement_level: recommended

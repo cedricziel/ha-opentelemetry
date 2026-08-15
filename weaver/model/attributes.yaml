@@ -2,9 +2,9 @@ groups:
   - id: registry.homeassistant
     type: attribute_group
     brief: >
-      Attributes describing Home Assistant entities, domains, and service
-      calls, shared across the metrics, logs, and traces emitted by the
-      ha-opentelemetry integration.
+      Attributes describing Home Assistant entities, domains, service calls,
+      automations, and event-bus context, shared across the metrics, logs,
+      and traces emitted by the ha-opentelemetry integration.
     stability: development
     attributes:
       - id: homeassistant.entity_id
@@ -12,16 +12,34 @@ groups:
         stability: development
         brief: The Home Assistant entity ID this telemetry is about.
         examples: ["light.kitchen", "sensor.living_room_temperature"]
+      - id: homeassistant.target.entity_ids
+        type: string[]
+        stability: development
+        brief: >
+          The entity IDs targeted by a service call that addresses more than
+          one entity. Mutually exclusive with homeassistant.entity_id, which
+          is used instead when a call targets exactly one entity.
+        examples: [["light.kitchen", "light.hallway"]]
       - id: homeassistant.domain
         type: string
         stability: development
-        brief: The Home Assistant integration domain an entity belongs to.
-        examples: ["light", "sensor", "climate"]
+        brief: >
+          A Home Assistant integration domain — an entity's platform, a
+          config entry's integration, or a log record's originating
+          component.
+        examples: ["light", "sensor", "climate", "mqtt"]
       - id: homeassistant.unit
         type: string
         stability: development
         brief: The unit of measurement reported by an entity's state, if any.
         examples: ["°C", "W", "%"]
+      - id: homeassistant.area
+        type: string
+        stability: development
+        brief: >
+          The name of the area an entity is assigned to, resolved from the
+          entity itself or, failing that, its device.
+        examples: ["Kitchen", "Garage"]
       - id: homeassistant.service.domain
         type: string
         stability: development
@@ -42,3 +60,42 @@ groups:
         stability: development
         brief: An entity's state before a state change.
         examples: ["on", "off", "20.9"]
+      - id: homeassistant.automation.name
+        type: string
+        stability: development
+        brief: The friendly name of a triggered automation.
+        examples: ["Night mode", "Turn off lights at sunset"]
+      - id: homeassistant.automation.source
+        type: string
+        stability: development
+        brief: A description of what triggered the automation.
+        examples: ["state of binary_sensor.dark", "time"]
+      - id: homeassistant.event.type
+        type: string
+        stability: development
+        brief: The Home Assistant event bus event type.
+        examples: ["state_changed", "call_service", "automation_triggered"]
+      - id: homeassistant.config_entry.state
+        type: string
+        stability: development
+        brief: The state of a Home Assistant config entry (integration instance).
+        examples: ["loaded", "setup_error", "setup_retry", "not_loaded"]
+      - id: homeassistant.context.id
+        type: string
+        stability: development
+        brief: >
+          The ID of the Home Assistant event context this telemetry was
+          recorded under. Events caused by one another (e.g. an automation
+          triggering a service call) share a context chain, joinable via
+          this attribute and homeassistant.context.parent_id.
+        examples: ["01HQZX3K7N8T5J6M2P4R6S8V0W"]
+      - id: homeassistant.context.parent_id
+        type: string
+        stability: development
+        brief: The context ID of the event that caused this one, if any.
+        examples: ["01HQZX3K7N8T5J6M2P4R6S8V0W"]
+      - id: homeassistant.context.user_id
+        type: string
+        stability: development
+        brief: The ID of the user who caused this event, if any.
+        examples: ["a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4"]

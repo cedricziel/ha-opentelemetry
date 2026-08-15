@@ -12,27 +12,59 @@ groups:
       - ref: homeassistant.domain
         requirement_level: required
 
-  - id: metric.homeassistant.state_changed.count
+  - id: metric.homeassistant.entities.unavailable.count
     type: metric
-    metric_name: homeassistant.state_changed.count
+    metric_name: homeassistant.entities.unavailable.count
     stability: development
     brief: >
-      State changes observed on the Home Assistant event bus since this
-      integration was set up. Emitted when system-scoped metrics are
-      enabled.
+      Entities currently in an unavailable or unknown state, grouped by
+      domain. Emitted when system-scoped metrics are enabled.
     instrument: gauge
     unit: "1"
+    attributes:
+      - ref: homeassistant.domain
+        requirement_level: required
 
-  - id: metric.homeassistant.service_calls.count
+  - id: metric.homeassistant.config_entries.count
     type: metric
-    metric_name: homeassistant.service_calls.count
+    metric_name: homeassistant.config_entries.count
     stability: development
     brief: >
-      Service calls observed on the Home Assistant event bus since this
-      integration was set up. Emitted when system-scoped metrics are
-      enabled.
+      Configured integrations (config entries), grouped by domain and
+      state. Emitted when system-scoped metrics are enabled.
     instrument: gauge
     unit: "1"
+    attributes:
+      - ref: homeassistant.domain
+        requirement_level: required
+      - ref: homeassistant.config_entry.state
+        requirement_level: required
+
+  - id: metric.homeassistant.setup.duration
+    type: metric
+    metric_name: homeassistant.setup.duration
+    stability: development
+    brief: >
+      Time spent setting up each integration domain during Home Assistant
+      startup. Emitted when system-scoped metrics are enabled.
+    instrument: gauge
+    unit: s
+    attributes:
+      - ref: homeassistant.domain
+        requirement_level: required
+
+  - id: metric.homeassistant.events
+    type: metric
+    metric_name: homeassistant.events
+    stability: development
+    brief: >
+      Home Assistant bus events observed, grouped by event type. Emitted
+      when system-scoped metrics are enabled.
+    instrument: counter
+    unit: "1"
+    attributes:
+      - ref: homeassistant.event.type
+        requirement_level: required
 
   - id: metric.homeassistant.entity.state
     type: metric
@@ -50,4 +82,6 @@ groups:
       - ref: homeassistant.domain
         requirement_level: required
       - ref: homeassistant.unit
+        requirement_level: recommended
+      - ref: homeassistant.area
         requirement_level: recommended
