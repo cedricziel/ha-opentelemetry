@@ -14,11 +14,13 @@ Each signal can be turned on or off independently, and scoped to system-level te
 
 | Signal  | System scope | Entity scope |
 | ------- | --- | --- |
-| **Metrics** | Entity counts by domain, state-changed/service-call throughput | Numeric entity state as a gauge, with `homeassistant.entity_id`, `homeassistant.domain`, `homeassistant.unit` attributes |
-| **Logs** | Home Assistant's own log records, forwarded via the standard `logging` bridge | — |
-| **Traces** | A point-in-time span per service call (`service_call <domain>.<service>`) | A point-in-time span per state change (`state_changed <entity_id>`), and entity IDs attached to service-call spans |
+| **Metrics** | Bus events by type (`homeassistant.events`), entity counts by domain, unavailable-entity counts by domain, config-entry counts by domain/state, per-domain setup duration | Numeric entity state as a gauge, with `homeassistant.entity_id`, `homeassistant.domain`, `homeassistant.unit`, `homeassistant.area` attributes |
+| **Logs** | Home Assistant's own log records, forwarded via the standard `logging` bridge, enriched with `homeassistant.domain` derived from the logger name | — |
+| **Traces** | A point-in-time span per service call (`service_call <domain>.<service>`) and per automation trigger (`automation_triggered <entity_id>`) | Entity ID/area attached to service-call spans; state-changed spans (`state_changed <entity_id>`), off by default — see below |
 
-Traces are point-in-time (`start_time == end_time`): Home Assistant exposes no public hook around service-call completion, so these mark that something happened rather than covering its execution duration.
+Traces are point-in-time (`start_time == end_time`): Home Assistant exposes no public hook around service-call or automation-run completion, so these mark that something happened rather than covering its execution duration. Every span carries `homeassistant.context.id`/`.parent_id`/`.user_id` from the originating Home Assistant event context, so a backend can join an automation trigger to the service calls it caused.
+
+State-changed spans are **off by default** — a busy home can produce hundreds of thousands a day, they carry no duration, and the same information is already available as the `homeassistant.entity.state` metric. Turn them on via the `enable_state_changed_traces` option if you specifically want per-change spans (e.g. for automation debugging); they respect the same entity include/exclude filters as entity-scoped metrics.
 
 Two more metric groups are independently toggleable, using standard OTel semantic conventions (not `homeassistant.*`) via the official [`opentelemetry-instrumentation-system-metrics`](https://pypi.org/project/opentelemetry-instrumentation-system-metrics/) package:
 
@@ -59,7 +61,7 @@ CI runs this on every change to `weaver/`.
 
 ### Options (changeable any time, reload on save)
 
-Enable/disable traces, metrics, logs; include system-level and/or per-entity telemetry; include process and/or host resource metrics; set the metric export interval; and optionally restrict per-entity telemetry to specific domains or exclude specific entities.
+Enable/disable traces, metrics, logs; include system-level and/or per-entity telemetry; include process and/or host resource metrics; opt in to state-changed trace spans; set the metric export interval; and optionally restrict per-entity telemetry (metrics and, if enabled, state-changed spans) to specific domains or exclude specific entities.
 
 ## Development
 
