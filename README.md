@@ -67,3 +67,5 @@ ruff check custom_components tests
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+The icon in [`custom_components/opentelemetry/brand/`](custom_components/opentelemetry/brand/) is the official [OpenTelemetry](https://opentelemetry.io/) logo, from [cncf/artwork](https://github.com/cncf/artwork/tree/master/projects/opentelemetry), used per the [CNCF trademark usage guidelines](https://github.com/cncf/artwork/blob/master/LICENSE.md) to indicate OTLP compatibility.
