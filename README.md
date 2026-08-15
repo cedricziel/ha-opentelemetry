@@ -20,6 +20,11 @@ Each signal can be turned on or off independently, and scoped to system-level te
 
 Traces are point-in-time (`start_time == end_time`): Home Assistant exposes no public hook around service-call completion, so these mark that something happened rather than covering its execution duration.
 
+Two more metric groups are independently toggleable, using standard OTel semantic conventions (not `homeassistant.*`) via the official [`opentelemetry-instrumentation-system-metrics`](https://pypi.org/project/opentelemetry-instrumentation-system-metrics/) package:
+
+- **Process metrics** (`process.*`, `cpython.*`): the Home Assistant Python process's own CPU, memory, threads, file descriptors, and GC stats.
+- **Host metrics** (`system.*`): CPU, memory, swap, disk, and network of the machine/container Home Assistant runs on. In a containerized install (e.g. Home Assistant OS), these reflect what's visible from inside that container.
+
 ### Semantic conventions
 
 The exact attribute, metric, and span names above are formally defined as an [OpenTelemetry Weaver](https://github.com/open-telemetry/weaver) semantic-convention registry in [`weaver/`](weaver/), extending the standard OTel semantic conventions. Validate it with:
@@ -54,7 +59,7 @@ CI runs this on every change to `weaver/`.
 
 ### Options (changeable any time, reload on save)
 
-Enable/disable traces, metrics, logs; include system-level and/or per-entity telemetry; set the metric export interval; and optionally restrict per-entity telemetry to specific domains or exclude specific entities.
+Enable/disable traces, metrics, logs; include system-level and/or per-entity telemetry; include process and/or host resource metrics; set the metric export interval; and optionally restrict per-entity telemetry to specific domains or exclude specific entities.
 
 ## Development
 

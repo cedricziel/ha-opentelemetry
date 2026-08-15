@@ -44,6 +44,8 @@
         "data": {
           "enable_traces": "Export traces",
           "enable_metrics": "Export metrics",
+          "enable_process_metrics": "Include process metrics (Home Assistant's own CPU, memory, threads, GC)",
+          "enable_host_metrics": "Include host metrics (machine/container CPU, memory, swap, disk, network)",
           "enable_logs": "Export logs",
           "scope_system": "Include system-level telemetry (service calls, entity counts, event throughput)",
           "scope_entities": "Include per-entity telemetry (entity state as metrics/spans)",

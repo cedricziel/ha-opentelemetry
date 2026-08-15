@@ -18,8 +18,10 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from .const import (
     CONF_AUTH_HEADER,
     CONF_DATASET_ID,
+    CONF_ENABLE_HOST_METRICS,
     CONF_ENABLE_LOGS,
     CONF_ENABLE_METRICS,
+    CONF_ENABLE_PROCESS_METRICS,
     CONF_ENABLE_TRACES,
     CONF_ENDPOINT,
     CONF_EXCLUDE_ENTITIES,
@@ -31,8 +33,10 @@ from .const import (
     CONF_SCOPE_SYSTEM,
     CONF_SERVICE_NAME,
     CONF_TENANT_ID,
+    DEFAULT_ENABLE_HOST_METRICS,
     DEFAULT_ENABLE_LOGS,
     DEFAULT_ENABLE_METRICS,
+    DEFAULT_ENABLE_PROCESS_METRICS,
     DEFAULT_ENABLE_TRACES,
     DEFAULT_SCAN_INTERVAL,
     DEFAULT_SCOPE_ENTITIES,
@@ -42,6 +46,7 @@ from .const import (
 )
 from .logs import attach_log_handler, detach_log_handler
 from .metrics import HomeAssistantMetrics
+from .system_metrics import start_system_metrics, stop_system_metrics
 from .traces import HomeAssistantTracing
 
 _LOGGER = logging.getLogger(__name__)
@@ -87,6 +92,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     scan_interval = options.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL)
     include_domains = options.get(CONF_INCLUDE_DOMAINS, [])
     exclude_entities = options.get(CONF_EXCLUDE_ENTITIES, [])
+    enable_process_metrics = options.get(
+        CONF_ENABLE_PROCESS_METRICS, DEFAULT_ENABLE_PROCESS_METRICS
+    )
+    enable_host_metrics = options.get(
+        CONF_ENABLE_HOST_METRICS, DEFAULT_ENABLE_HOST_METRICS
+    )
 
     ha_uuid = await instance_id.async_get(hass)
     resource = Resource.create(
@@ -155,6 +166,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             include_domains=include_domains,
             exclude_entities=exclude_entities,
         )
+        runtime["system_metrics"] = start_system_metrics(
+            meter_provider,
+            process_metrics=enable_process_metrics,
+            host_metrics=enable_host_metrics,
+        )
 
     if enable_logs:
         if protocol == PROTOCOL_GRPC:
@@ -203,6 +219,10 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     metrics: HomeAssistantMetrics | None = runtime.get("metrics")
     if metrics is not None:
         metrics.async_shutdown()
+
+    system_metrics = runtime.get("system_metrics")
+    if system_metrics is not None:
+        stop_system_metrics(system_metrics)
 
     log_handler = runtime.get("log_handler")
     if log_handler is not None:

@@ -25,8 +25,10 @@ from homeassistant.helpers.selector import (
 from .const import (
     CONF_AUTH_HEADER,
     CONF_DATASET_ID,
+    CONF_ENABLE_HOST_METRICS,
     CONF_ENABLE_LOGS,
     CONF_ENABLE_METRICS,
+    CONF_ENABLE_PROCESS_METRICS,
     CONF_ENABLE_TRACES,
     CONF_ENDPOINT,
     CONF_EXCLUDE_ENTITIES,
@@ -38,8 +40,10 @@ from .const import (
     CONF_SCOPE_SYSTEM,
     CONF_SERVICE_NAME,
     CONF_TENANT_ID,
+    DEFAULT_ENABLE_HOST_METRICS,
     DEFAULT_ENABLE_LOGS,
     DEFAULT_ENABLE_METRICS,
+    DEFAULT_ENABLE_PROCESS_METRICS,
     DEFAULT_ENABLE_TRACES,
     DEFAULT_INSECURE,
     DEFAULT_PROTOCOL,
@@ -188,6 +192,18 @@ class OpenTelemetryOptionsFlow(OptionsFlow):
                 vol.Required(
                     CONF_ENABLE_METRICS,
                     default=current.get(CONF_ENABLE_METRICS, DEFAULT_ENABLE_METRICS),
+                ): BooleanSelector(),
+                vol.Required(
+                    CONF_ENABLE_PROCESS_METRICS,
+                    default=current.get(
+                        CONF_ENABLE_PROCESS_METRICS, DEFAULT_ENABLE_PROCESS_METRICS
+                    ),
+                ): BooleanSelector(),
+                vol.Required(
+                    CONF_ENABLE_HOST_METRICS,
+                    default=current.get(
+                        CONF_ENABLE_HOST_METRICS, DEFAULT_ENABLE_HOST_METRICS
+                    ),
                 ): BooleanSelector(),
                 vol.Required(
                     CONF_ENABLE_LOGS,

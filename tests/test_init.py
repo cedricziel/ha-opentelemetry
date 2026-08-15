@@ -46,6 +46,10 @@ def mock_exporters():
             "opentelemetry.exporter.otlp.proto.grpc._log_exporter.OTLPLogExporter",
             return_value=MagicMock(),
         ),
+        patch(
+            "custom_components.opentelemetry.system_metrics.SystemMetricsInstrumentor",
+            return_value=MagicMock(),
+        ),
     ):
         yield
 
@@ -66,6 +70,7 @@ async def test_setup_and_unload_entry(
     assert "logger_provider" in runtime
     assert "tracing" in runtime
     assert "metrics" in runtime
+    assert "system_metrics" in runtime
 
     assert await hass.config_entries.async_unload(entry.entry_id)
     await hass.async_block_till_done()

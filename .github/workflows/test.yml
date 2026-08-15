@@ -24,7 +24,8 @@ jobs:
             "opentelemetry-sdk>=1.27.0,<2.0.0" \
             "opentelemetry-exporter-otlp-proto-grpc>=1.27.0,<2.0.0" \
             "opentelemetry-exporter-otlp-proto-http>=1.27.0,<2.0.0" \
-            "opentelemetry-instrumentation-logging>=0.48b0"
+            "opentelemetry-instrumentation-logging>=0.48b0" \
+            "opentelemetry-instrumentation-system-metrics>=0.48b0"
       - name: pytest
         run: pytest tests/ -v
 
