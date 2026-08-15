@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/cedricziel/ha-opentelemetry/compare/v0.3.0...v0.3.1) (2026-08-15)
+
+
+### Bug Fixes
+
+* **opentelemetry:** fix crashing process/host metric callbacks ([175fba0](https://github.com/cedricziel/ha-opentelemetry/commit/175fba0af95a34f3466a5ef1fd9e241f562b42ec))
+
 ## [0.3.0](https://github.com/cedricziel/ha-opentelemetry/compare/v0.2.0...v0.3.0) (2026-08-15)
 
 
